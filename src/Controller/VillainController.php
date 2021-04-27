@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Move;
 use App\Entity\Villain;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +14,17 @@ class VillainController extends AbstractController
     public function index(): Response
     {
         $villain = new Villain();
-        $villain->setName('Thanos');
-        $villain->setCostume('Golden armour');
-        $villain->setBadness(5000);
+        $villain->setName('Joker');
+        $villain->setCostume('Clown costume');
+        $villain->setBadness(1000);
+
+        $move = new Move();
+        $move->setName('Bombings');
+        $villain->addMove($move);
+
+        $move = new Move();
+        $move->setName('Sending goons');
+        $villain->addMove($move);
 
         $this->getDoctrine()->getManager()->persist($villain);
         $this->getDoctrine()->getManager()->flush();
@@ -25,10 +34,14 @@ class VillainController extends AbstractController
         ]);
     }
 
-    #[Route('/villain/{id}', name: 'villain_show')]
-    public function detail($id)
+    #[Route('/villain/{villain}', name: 'villain_show')]
+    public function detail(Villain $villain)
     {
-        $villain = $this->getDoctrine()->getRepository(Villain::class)->find($id);
+        // $villain = $this->getDoctrine()->getRepository(Villain::class)->find($id);
+
+        $villain->upBadness();
+
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->render('villain/show.html.twig', [
            'villain' => $villain,

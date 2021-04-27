@@ -4,6 +4,10 @@
     <h1>{{ villain.name }}</h1>
     <p>Armour: {{ villain.costume }}</p>
     <p>Badness: {{ villain.badness }}</p>
+
+    {% for move in villain.moves %}
+        <li>{{ move.name }}</li>
+    {%  endfor %}
 {% endblock %}
 
 {% block title %}

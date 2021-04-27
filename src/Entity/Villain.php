@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VillainRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,16 @@ class Villain
      * @ORM\Column(type="integer")
      */
     private $badness;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Move::class, inversedBy="villains", cascade={"persist"})
+     */
+    private $moves;
+
+    public function __construct()
+    {
+        $this->moves = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -72,4 +84,34 @@ class Villain
 
         return $this;
     }
+
+    public function upBadness()
+    {
+        $this->badness++;
+    }
+
+    /**
+     * @return Collection|Move[]
+     */
+    public function getMoves(): Collection
+    {
+        return $this->moves;
+    }
+
+    public function addMove(Move $move): self
+    {
+        if (!$this->moves->contains($move)) {
+            $this->moves[] = $move;
+        }
+
+        return $this;
+    }
+
+    public function removeMove(Move $move): self
+    {
+        $this->moves->removeElement($move);
+
+        return $this;
+    }
+
 }
