@@ -15,5 +15,19 @@
     </head>
     <body>
         {% block body %}{% endblock %}
+
+        <nav>
+            <h3>Menu</h3>
+            <ul>
+                {% block menu %}
+                    <li>A</li>
+                    <li>B</li>
+                {% endblock %}
+            </ul>
+        </nav>
+
+        <footer>
+            &copy BeCode - {% block footer %}A default message{% endblock %}
+        </footer>
     </body>
 </html>
